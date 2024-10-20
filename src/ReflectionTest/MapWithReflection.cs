@@ -5,36 +5,33 @@ namespace SourceGeneratorVsReflection.ReflectionTest;
 
 public static class MapWithReflection
 {
-    public static List<RandomPropertiesClass> Import()
+    public static List<RandomPropertiesClass> Import(string[] allRowsFile)
     {
-        string csvFilePath = Configuration.GetCsvFileNameWithPath;
         List<RandomPropertiesClass> loadedData = [];
 
         try
         {
-            using (StreamReader reader = new(csvFilePath))
+            // read header
+            string[] headers = allRowsFile[0].Split(',');
+
+            for (var counter = 1; counter < allRowsFile.Length; counter++)
             {
-                // read header
-                string[] headers = reader.ReadLine()!.Split(',');
-
                 // read the data
-                while (!reader.EndOfStream)
-                {
-                    string[] values = ReadCsvLine(reader);
-                    if (values.Length != headers.Length) continue;
+                var reader = allRowsFile[counter];
+                string[] values = ReadCsvLine(reader);
+                if (values.Length != headers.Length) continue;
 
-                    RandomPropertiesClass item = new RandomPropertiesClass();
-                    for (int i = 0; i < headers.Length; i++)
+                RandomPropertiesClass item = new RandomPropertiesClass();
+                for (int i = 0; i < headers.Length; i++)
+                {
+                    PropertyInfo prop = typeof(RandomPropertiesClass).GetProperty(headers[i])!;
+                    if (prop != null && values[i] != "")
                     {
-                        PropertyInfo prop = typeof(RandomPropertiesClass).GetProperty(headers[i])!;
-                        if (prop != null && values[i] != "")
-                        {
-                            object value = Convert.ChangeType(values[i], prop.PropertyType);
-                            prop.SetValue(item, value);
-                        }
+                        object value = Convert.ChangeType(values[i], prop.PropertyType);
+                        prop.SetValue(item, value);
                     }
-                    loadedData.Add(item);
                 }
+                loadedData.Add(item);
             }
 
 #if (DEBUG)
@@ -55,18 +52,15 @@ public static class MapWithReflection
         }
     }
 
-    private static string[] ReadCsvLine(StreamReader reader)
+    private static string[] ReadCsvLine(string row)
     {
         List<string> result = [];
         bool inQuotes = false;
         string currentValue = "";
 
-        while (true)
+        for(var counter = 0; counter < row.Length; counter++)
         {
-            int charInt = reader.Read();
-            if (charInt == -1) break; // End of file
-
-            char c = (char)charInt;
+            char c = row[counter];
             if (c == '"')
             {
                 inQuotes = !inQuotes;
@@ -75,29 +69,14 @@ public static class MapWithReflection
             {
                 result.Add(currentValue);
                 currentValue = "";
-            }
-            else if (c == '\r' || c == '\n')
-            {
-                if (inQuotes)
-                {
-                    currentValue += c;
-                }
-                else
-                {
-                    if (currentValue != "" || result.Count > 0)
-                    {
-                        result.Add(currentValue);
-                        if (c == '\r' && reader.Peek() == '\n') reader.Read(); // \r\n
-                        break;
-                    }
-                }
-            }
+            }            
             else
             {
                 currentValue += c;
             }
         }
 
+        result.Add(currentValue);
         return result.ToArray();
     }
 }

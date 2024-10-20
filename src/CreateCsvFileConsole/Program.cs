@@ -81,6 +81,8 @@ using (StreamWriter writer = new StreamWriter(csvFilePath))
 
 Console.WriteLine($"File created: {Path.GetFullPath(csvFilePath)}");
 
+string[] allRowsFile = File.ReadAllLines(Configuration.GetCsvFileNameWithPath);
+
 #if(!DEBUG)
 var benchmarkSummary1 = BenchmarkRunner.Run<BenchmarkTest>();
 return;
@@ -89,13 +91,13 @@ return;
 Console.WriteLine(new string('=', 120));
 
 Stopwatch sw1 = Stopwatch.StartNew();
-MapWithReflection.Import();
+MapWithReflection.Import(allRowsFile);
 sw1.Stop();
 Console.WriteLine($"Reflection import = {sw1.ElapsedMilliseconds}ms");
 
 Console.WriteLine();
 
 Stopwatch sw2 = Stopwatch.StartNew();
-MapWithSourceGenerator.Import();
+MapWithSourceGenerator.Import(allRowsFile);
 sw2.Stop();
 Console.WriteLine($"Source Generator import = {sw2.ElapsedMilliseconds}ms");
