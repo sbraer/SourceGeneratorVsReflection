@@ -69,6 +69,7 @@ public static class Files
                 {
                     var value = p.GetValue(item)?.ToString() ?? "";
                     // manage comma and double quote
+                    value = value.Replace(",", string.Empty);
                     return value.Contains(',') ? $"\"{value.Replace("\"", "\"\"")}\"" : value;
                 });
             writer.WriteLine(string.Join(",", values));

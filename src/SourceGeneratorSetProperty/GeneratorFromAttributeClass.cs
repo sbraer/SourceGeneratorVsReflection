@@ -1,6 +1,7 @@
 ﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using System;
 using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.Collections.Immutable;
@@ -129,7 +130,7 @@ public sealed class GeneratorFromAttributeClass : IIncrementalGenerator
             foreach (var subType in info.MasterType.SubTypes)
             {
                 var ns = string.IsNullOrEmpty(subType.Namespace) ? string.Empty : subType.Namespace! + ".";
-                tx.WriteLine($"{SyntaxFacts.GetText(info.ClassAccessibility)} static void SetProperties{subType.Classname}({ns}{subType.Classname} obj, string[] values)");
+                tx.WriteLine($"{SyntaxFacts.GetText(info.ClassAccessibility)} static void SetProperties{subType.Classname}({ns}{subType.Classname} obj, ReadOnlySpan<char> row)");
                 tx.WriteLine('{');
                 tx.Indent++;
                 InsertPropertiesInSwitch(ctx, tx, subType);
@@ -153,16 +154,32 @@ public sealed class GeneratorFromAttributeClass : IIncrementalGenerator
 
     private static void InsertPropertiesInSwitch(SourceProductionContext context, IndentedTextWriter tx, SubTypeClass subType)
     {
+        //tx.WriteLine("Console.WriteLine(\"> \" + row.ToString());");
+        tx.WriteLine("var index = row.IndexOf(',');");
+
         for (var counter = 0; counter < subType.Properties.Count; counter++)
         {
             var property = subType.Properties[counter];
             var clrType = Helper.GetClrTypeName(property.Type);
 
-            tx.WriteLine((clrType.TypeClr) switch
+            if (counter != subType.Properties.Count - 1)
             {
-                (Helper.TypeClr.DateTime or Helper.TypeClr.Number) => $"obj.{property.Name} = {clrType.TypeString}.Parse(values[{counter}]);",
-                _ => $"obj.{property.Name} = values[{counter}];"
-            });
+                tx.WriteLine((clrType.TypeClr) switch
+                {
+                    (Helper.TypeClr.DateTime or Helper.TypeClr.Number) => $"obj.{property.Name} = {clrType.TypeString}.Parse(row.Slice(0, index));",
+                    _ => $"obj.{property.Name} = row.Slice(0, index).ToString();"
+                });
+                tx.WriteLine("row = row.Slice(index + 1);");
+                tx.WriteLine("index = row.IndexOf(',');");
+            }
+            else
+            {
+                tx.WriteLine((clrType.TypeClr) switch
+                {
+                    (Helper.TypeClr.DateTime or Helper.TypeClr.Number) => $"obj.{property.Name} = {clrType.TypeString}.Parse(row.Slice(0));",
+                    _ => $"obj.{property.Name} = row.Slice(0).ToString();"
+                });
+            }
         }
     }
 }

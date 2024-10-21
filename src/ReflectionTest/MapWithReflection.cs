@@ -18,18 +18,28 @@ public static class MapWithReflection
             for (var counter = 1; counter < allRowsFile.Length; counter++)
             {
                 // read the data
-                var reader = allRowsFile[counter];
-                string[] values = Files.ReadCsvLine(reader);
-                if (values.Length != headers.Length) continue;
+                var reader = allRowsFile[counter].AsSpan();
 
                 RandomPropertiesClass item = new RandomPropertiesClass();
+                var index = reader.IndexOf(',');
                 for (int i = 0; i < headers.Length; i++)
                 {
                     PropertyInfo prop = typeof(RandomPropertiesClass).GetProperty(headers[i])!;
-                    if (prop != null && values[i] != "")
+                    if (prop != null)
                     {
-                        object value = Convert.ChangeType(values[i], prop.PropertyType);
-                        prop.SetValue(item, value);
+                        object value;
+                        if (i != headers.Length - 1)
+                        {
+                            value = Convert.ChangeType(reader.Slice(0, index).ToString(), prop.PropertyType);
+                            prop.SetValue(item, value);
+                            reader = reader.Slice(index + 1);
+                            index = reader.IndexOf(',');
+                        }
+                        else
+                        {
+                            value = Convert.ChangeType(reader.Slice(0).ToString(), prop.PropertyType);                            
+                            prop.SetValue(item, value);
+                        }
                     }
                 }
                 loadedData.Add(item);

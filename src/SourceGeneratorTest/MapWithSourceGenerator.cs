@@ -18,11 +18,11 @@ public class MapWithSourceGenerator
             {
                 // read the data
                 var reader = allRowsFile[counter];
-                string[] values = Files.ReadCsvLine(reader);
-                if (values.Length != headers.Length) continue;
+                //string[] values = Files.ReadCsvLine(reader);
+                //if (values.Length != headers.Length) continue;
 
                 RandomPropertiesClass item = new();
-                ClassHelper.SetPropertiesRandomPropertiesClass(item, values);
+                ClassHelper.SetPropertiesRandomPropertiesClass(item, reader);
                 loadedData.Add(item);
             }
 
@@ -31,6 +31,9 @@ public class MapWithSourceGenerator
         catch (Exception ex)
         {
             Console.WriteLine($"Generic error: {ex.Message}");
+#if(DEBUG)
+            Console.WriteLine($"Error: {ex}");
+#endif
             return [];
         }
     }
