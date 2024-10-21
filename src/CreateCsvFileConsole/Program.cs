@@ -85,9 +85,7 @@ string[] allRowsFile = File.ReadAllLines(Configuration.GetCsvFileNameWithPath);
 
 #if(!DEBUG)
 var benchmarkSummary1 = BenchmarkRunner.Run<BenchmarkTest>();
-return;
-#endif
-
+#else
 Console.WriteLine(new string('=', 120));
 
 Stopwatch sw1 = Stopwatch.StartNew();
@@ -101,3 +99,4 @@ Stopwatch sw2 = Stopwatch.StartNew();
 MapWithSourceGenerator.Import(allRowsFile);
 sw2.Stop();
 Console.WriteLine($"Source Generator import = {sw2.ElapsedMilliseconds}ms");
+#endif
