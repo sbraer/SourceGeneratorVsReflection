@@ -162,16 +162,11 @@ public sealed class GeneratorFromAttributeClass : IIncrementalGenerator
         for (var counter = 0; counter < subType.Properties.Count; counter++)
         {
             var property = subType.Properties[counter];
-
             var clrType = Helper.GetClrTypeName(property.Type);
 
-            tx.WriteLine((clrType.TypeClr, clrType.IsNullable) switch
+            tx.WriteLine((clrType.TypeClr) switch
             {
-                (Helper.TypeClr.DateTime, false) => $"obj.{property.Name} = DateTime.Parse(values[{counter}]!);",
-                (Helper.TypeClr.DateTime, true) => $"obj.{property.Name} = DateTime.Parse(values[{counter}]!);",
-                (Helper.TypeClr.Number, true) => $"obj.{property.Name} = ConversionHelper.Parse<{clrType.TypeString}>(values[{counter}]!);",
-                (Helper.TypeClr.Number, false) => $"obj.{property.Name} = ConversionHelper.Parse<{clrType.TypeString}>(values[{counter}]!);",
-                (Helper.TypeClr.String, true) => $"obj.{property.Name} = values[{counter}];",
+                (Helper.TypeClr.DateTime or Helper.TypeClr.Number) => $"obj.{property.Name} = ConversionHelper.Parse<{clrType.TypeString}>(values[{counter}]);",
                 _ => $"obj.{property.Name} = values[{counter}];"
             });
         }
