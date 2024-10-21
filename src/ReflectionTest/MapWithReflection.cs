@@ -25,22 +25,27 @@ public static class MapWithReflection
                 for (int i = 0; i < headers.Length; i++)
                 {
                     PropertyInfo prop = typeof(RandomPropertiesClass).GetProperty(headers[i])!;
-                    if (prop != null)
+                    if (prop is not null)
                     {
                         object value;
+                        
+                        // Se non è l'ultimo elemento, fai lo slicing fino all'indice della virgola
                         if (i != headers.Length - 1)
                         {
                             value = Convert.ChangeType(reader.Slice(0, index).ToString(), prop.PropertyType);
-                            prop.SetValue(item, value);
-                            reader = reader.Slice(index + 1);
-                            index = reader.IndexOf(',');
+                            reader = reader.Slice(index + 1);  // Aggiorna il reader
+                            index = reader.IndexOf(',');       // Trova il prossimo indice della virgola
                         }
                         else
                         {
-                            value = Convert.ChangeType(reader.Slice(0).ToString(), prop.PropertyType);                            
-                            prop.SetValue(item, value);
+                            // Se è l'ultimo elemento, prendi tutto il resto del reader
+                            value = Convert.ChangeType(reader.Slice(0).ToString(), prop.PropertyType);
                         }
+                        
+                        // Imposta il valore sulla proprietà
+                        prop.SetValue(item, value);
                     }
+
                 }
                 loadedData.Add(item);
             }

@@ -162,23 +162,24 @@ public sealed class GeneratorFromAttributeClass : IIncrementalGenerator
             var property = subType.Properties[counter];
             var clrType = Helper.GetClrTypeName(property.Type);
 
-            if (counter != subType.Properties.Count - 1)
+            // Controllo se è l'ultimo elemento
+            bool isLastProperty = counter == subType.Properties.Count - 1;
+
+            // Seleziona la slice in base alla posizione (ultimo o no)
+            var sliceString = isLastProperty ? "row.Slice(0)" : "row.Slice(0, index)";
+
+            // Scrivi l'assegnazione della proprietà
+            tx.WriteLine((clrType.TypeClr) switch
             {
-                tx.WriteLine((clrType.TypeClr) switch
-                {
-                    (Helper.TypeClr.DateTime or Helper.TypeClr.Number) => $"obj.{property.Name} = {clrType.TypeString}.Parse(row.Slice(0, index));",
-                    _ => $"obj.{property.Name} = row.Slice(0, index).ToString();"
-                });
+                (Helper.TypeClr.DateTime or Helper.TypeClr.Number) => $"obj.{property.Name} = {clrType.TypeString}.Parse({sliceString});",
+                _ => $"obj.{property.Name} = {sliceString}.ToString();"
+            });
+
+            // Se non è l'ultima proprietà, aggiorna `row` e `index`
+            if (!isLastProperty)
+            {
                 tx.WriteLine("row = row.Slice(index + 1);");
                 tx.WriteLine("index = row.IndexOf(',');");
-            }
-            else
-            {
-                tx.WriteLine((clrType.TypeClr) switch
-                {
-                    (Helper.TypeClr.DateTime or Helper.TypeClr.Number) => $"obj.{property.Name} = {clrType.TypeString}.Parse(row.Slice(0));",
-                    _ => $"obj.{property.Name} = row.Slice(0).ToString();"
-                });
             }
         }
     }
