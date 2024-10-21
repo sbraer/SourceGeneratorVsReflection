@@ -31,7 +31,6 @@ var result1 = MapWithReflection.Import(allRowsFile);
 sw1.Stop();
 ShowData(result1);
 Console.WriteLine($"Reflection import = {sw1.ElapsedMilliseconds}ms");
-
 Console.WriteLine();
 
 Stopwatch sw2 = Stopwatch.StartNew();
@@ -40,10 +39,9 @@ sw2.Stop();
 ShowData(result2);
 Console.WriteLine($"Source Generator import = {sw2.ElapsedMilliseconds}ms");
 
-void ShowData(List<RandomPropertiesClass> loadedData)
+static void ShowData(List<RandomPropertiesClass> loadedData)
 {
     Console.WriteLine($"Elements in csv file: {loadedData.Count}");
-
     foreach (var item in loadedData.Take(3))
     {
         Console.WriteLine($"Name: {item.Name}, Age: {item.Age}, Profession: {item.Profession}, City: {item.City}");
