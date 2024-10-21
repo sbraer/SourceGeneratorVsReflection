@@ -1,4 +1,6 @@
-﻿namespace SourceGeneratorVsReflection.Utilities;
+﻿using SourceGeneratorVsReflection.Models;
+
+namespace SourceGeneratorVsReflection.Utilities;
 
 public static class Files
 {
@@ -51,5 +53,25 @@ public static class Files
         }
 
         return newPath;
+    }
+
+    public static void CreateCsvFile(List<RandomPropertiesClass> randomData, string csvFilePath)
+    {
+        using StreamWriter writer = new(csvFilePath);
+        // Header
+        writer.WriteLine(string.Join(",", typeof(RandomPropertiesClass).GetProperties().Select(p => p.Name)));
+
+        // Write the data
+        foreach (var item in randomData)
+        {
+            var values = typeof(RandomPropertiesClass).GetProperties()
+                .Select(p =>
+                {
+                    var value = p.GetValue(item)?.ToString() ?? "";
+                    // manage comma and double quote
+                    return value.Contains(',') ? $"\"{value.Replace("\"", "\"\"")}\"" : value;
+                });
+            writer.WriteLine(string.Join(",", values));
+        }
     }
 }

@@ -26,15 +26,6 @@ public class MapWithSourceGenerator
                 loadedData.Add(item);
             }
 
-#if (DEBUG)
-            Console.WriteLine($"Elements in csv file: {loadedData.Count}");
-
-            foreach (var item in loadedData.Take(3))
-            {
-                Console.WriteLine($"Name: {item.Name}, Age: {item.Age}, Profession: {item.Profession}");
-            }
-#endif
-
             return loadedData;
         }
         catch (Exception ex)
