@@ -47,12 +47,6 @@ public sealed class GeneratorFromAttributeClass : IIncrementalGenerator
             [global::System.AttributeUsage(global::System.AttributeTargets.Class, AllowMultiple = true, Inherited = false)]
             internal sealed class GenerateSetPropertyAttribute<T>() : global::System.Attribute where T : class
             {}
-
-            {{generatedCodeAttribute}}
-            internal static class ConversionHelper
-            {
-                internal static T Parse<T>(string str) where T : IParsable<T> => T.Parse(str, CultureInfo.InvariantCulture);
-            }
             """;
 
         var fileName = "GeneratorFromAttributeExample.GenerateSetPropertyAttribute.g.cs";
@@ -153,7 +147,7 @@ public sealed class GeneratorFromAttributeClass : IIncrementalGenerator
             }
 
             Debug.Assert(tx.Indent == 0);
-            ctx.AddSource($"{info.TypeName}.g.cs", writer.ToString());
+            ctx.AddSource($"GeneratorFromAttributeExample.{info.TypeName}.g.cs", writer.ToString());
         }
     }
 
@@ -166,7 +160,7 @@ public sealed class GeneratorFromAttributeClass : IIncrementalGenerator
 
             tx.WriteLine((clrType.TypeClr) switch
             {
-                (Helper.TypeClr.DateTime or Helper.TypeClr.Number) => $"obj.{property.Name} = ConversionHelper.Parse<{clrType.TypeString}>(values[{counter}]);",
+                (Helper.TypeClr.DateTime or Helper.TypeClr.Number) => $"obj.{property.Name} = {clrType.TypeString}.Parse(values[{counter}]);",
                 _ => $"obj.{property.Name} = values[{counter}];"
             });
         }
