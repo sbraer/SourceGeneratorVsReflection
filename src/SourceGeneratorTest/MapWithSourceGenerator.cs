@@ -1,4 +1,5 @@
 ﻿using SourceGeneratorVsReflection.Models;
+using SourceGeneratorVsReflection.Utilities;
 
 namespace SourceGeneratorVsReflection.SourceGeneratorTest;
 
@@ -17,14 +18,11 @@ public class MapWithSourceGenerator
             {
                 // read the data
                 var reader = allRowsFile[counter];
-                string[] values = ReadCsvLine(reader);
+                string[] values = Files.ReadCsvLine(reader);
                 if (values.Length != headers.Length) continue;
 
                 RandomPropertiesClass item = new();
-                for (int i = 0; i < headers.Length; i++)
-                {
-                    ClassHelper.SetPropertyRandomPropertiesClass(item, headers[i], values[i]);
-                }
+                ClassHelper.SetPropertiesRandomPropertiesClass(item, values);
                 loadedData.Add(item);
             }
 
@@ -44,33 +42,5 @@ public class MapWithSourceGenerator
             Console.WriteLine($"Generic error: {ex.Message}");
             return [];
         }
-    }
-
-    private static string[] ReadCsvLine(string row)
-    {
-        List<string> result = [];
-        bool inQuotes = false;
-        string currentValue = "";
-
-        for (var counter = 0; counter < row.Length; counter++)
-        {
-            char c = row[counter];
-            if (c == '"')
-            {
-                inQuotes = !inQuotes;
-            }
-            else if (c == ',' && !inQuotes)
-            {
-                result.Add(currentValue);
-                currentValue = "";
-            }
-            else
-            {
-                currentValue += c;
-            }
-        }
-
-        result.Add(currentValue);
-        return result.ToArray();
     }
 }

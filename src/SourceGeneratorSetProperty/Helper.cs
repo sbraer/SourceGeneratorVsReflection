@@ -61,23 +61,10 @@ public static class Helper
         return (false, typeSymbol);
     }
 
-    public static void ReportTypeNotSupportedDiagnostic(SourceProductionContext context, string message, string type)
-    {
-        var descriptor = new DiagnosticDescriptor(
-            id: "FSG001",
-            title: "Type not supported",
-            messageFormat: "The type '{1}' in property '{0}' is not supported",
-            category: "RegisterSourceOutput",
-            DiagnosticSeverity.Error,
-            isEnabledByDefault: true);
-
-        context.ReportDiagnostic(Diagnostic.Create(descriptor, Location.None, message, type));
-    }
-
     public static void ReportClassNotSupportedDiagnostic(SourceProductionContext context, string className)
     {
         var descriptor = new DiagnosticDescriptor(
-            id: "FSG002",
+            id: "FSG001",
             title: "Class not supported",
             messageFormat: "Class '{0}' must be static and partial",
             category: "RegisterSourceOutput",

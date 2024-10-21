@@ -1,34 +1,26 @@
-﻿namespace SourceGeneratorVsReflection;
+﻿using SourceGeneratorVsReflection.Utilities;
+
+namespace SourceGeneratorVsReflection;
 
 public static class Configuration
 {
+    private static string? csvPath;
+
     public static string GetCsvFileNameWithPath
     {
         get => Path.Combine(GetCsvPath, "example.csv");
     }
+
     public static string GetCsvPath
     {
         get
         {
-            var path = new Uri(Environment.CurrentDirectory);
-            string newPath = path.Segments[1];
-            for (var counter = 2; counter < path.Segments.Length; counter++)
+            if (string.IsNullOrEmpty(csvPath))
             {
-                var pathSegment = path.Segments[counter];
-                newPath = Path.Combine(newPath, pathSegment);
-                if (pathSegment.Equals("SourceGeneratorVsReflection" + Path.AltDirectorySeparatorChar, StringComparison.OrdinalIgnoreCase))
-                {
-                    newPath = Path.Combine(newPath, "CsvFile");
-                    break;
-                }
+                csvPath = Files.GetCsvPath("CsvFile");
             }
-
-            if (Directory.Exists(newPath))
-            {
-                Directory.CreateDirectory(newPath);
-            }
-
-            return newPath;
+            
+            return csvPath;
         }
     }
 }

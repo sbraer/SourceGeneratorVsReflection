@@ -7,6 +7,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\Utilities\Utilities.csproj" />
 		<ProjectReference Include="..\Configuration\Configuration.csproj" />
 		<ProjectReference Include="..\Models\Models.csproj" />
 		<ProjectReference Include="..\SourceGeneratorSetProperty\SourceGeneratorSetProperty.csproj" ReferenceOutputAssembly="false" OutputItemType="Analyzer" />
