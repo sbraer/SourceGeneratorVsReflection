@@ -19,7 +19,6 @@ public sealed class GeneratorFromAttributeClass : IIncrementalGenerator
 
     public void Initialize(IncrementalGeneratorInitializationContext context)
     {
-        //if (!Debugger.IsAttached) Debugger.Launch();
         context.RegisterPostInitializationOutput(GenerateFixedClasses);
 
         IncrementalValuesProvider<(string TypeName, Accessibility ClassAccessibility, string? Namespaces, MasterType masterType)> provider =
@@ -59,7 +58,6 @@ public sealed class GeneratorFromAttributeClass : IIncrementalGenerator
 
     private static (string TypeName, Accessibility ClassAccessibility, string? Namespaces, MasterType masterType) CreateObjCollection(GeneratorAttributeSyntaxContext context, CancellationToken _)
     {
-        //if (!Debugger.IsAttached) Debugger.Launch();
         var symbol = (INamedTypeSymbol)context.TargetSymbol;
         var className = symbol.Name;
 
@@ -96,7 +94,6 @@ public sealed class GeneratorFromAttributeClass : IIncrementalGenerator
 
     private static void CreateSourceCode(SourceProductionContext ctx, ImmutableArray<(string TypeName, Accessibility ClassAccessibility, string Namespaces, MasterType MasterType)> collectedClasses)
     {
-        //if (!Debugger.IsAttached) Debugger.Launch();
         foreach (var info in collectedClasses)
         {
             if (!info.MasterType.IsPartial || !info.MasterType.IsStatic)
