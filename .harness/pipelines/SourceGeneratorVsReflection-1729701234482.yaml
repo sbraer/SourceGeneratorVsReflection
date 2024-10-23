@@ -1,0 +1,35 @@
+pipeline:
+  identifier: Build_sbraer_SourceGeneratorVsReflection_1729701248436
+  name: Build SourceGeneratorVsReflection
+  orgIdentifier: default
+  projectIdentifier: Cipcip
+  properties:
+    ci:
+      codebase:
+        build: <+input>
+        connectorRef: account.Github_OAuth_1729701214251
+        repoName: sbraer/SourceGeneratorVsReflection
+  stages:
+    - stage:
+        identifier: build
+        name: build
+        spec:
+          caching:
+            enabled: true
+          cloneCodebase: true
+          execution:
+            steps:
+              - step:
+                  identifier: echo
+                  name: echo
+                  spec:
+                    command: echo hello world
+                  timeout: ""
+                  type: Run
+          platform:
+            arch: Amd64
+            os: Linux
+          runtime:
+            spec: {}
+            type: Cloud
+        type: CI
