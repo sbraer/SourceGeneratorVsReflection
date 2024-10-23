@@ -2,7 +2,7 @@
 using SourceGeneratorVsReflection;
 using SourceGeneratorVsReflection.Models;
 using SourceGeneratorVsReflection.ReflectionSimpleTest;
-using SourceGeneratorVsReflection.ReflectionTest;
+using SourceGeneratorVsReflection.ReflectionSpan;
 using SourceGeneratorVsReflection.SourceGeneratorTest;
 using SourceGeneratorVsReflection.Utilities;
 using System.Diagnostics;

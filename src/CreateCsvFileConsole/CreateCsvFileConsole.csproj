@@ -15,7 +15,7 @@
 		<ProjectReference Include="..\Configuration\Configuration.csproj" />
 		<ProjectReference Include="..\Models\Models.csproj" />
 		<ProjectReference Include="..\ReflectionSimple\ReflectionSimple.csproj" />
-		<ProjectReference Include="..\ReflectionTest\ReflectionTest.csproj" />
+		<ProjectReference Include="..\ReflectionSpan\ReflectionSpan.csproj" />
 		<ProjectReference Include="..\SourceGeneratorTest\SourceGeneratorTest.csproj" />
 	</ItemGroup>
 

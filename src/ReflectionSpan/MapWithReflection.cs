@@ -1,7 +1,7 @@
 ﻿using SourceGeneratorVsReflection.Models;
 using System.Reflection;
 
-namespace SourceGeneratorVsReflection.ReflectionTest;
+namespace SourceGeneratorVsReflection.ReflectionSpan;
 
 public static class MapWithReflection
 {

@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CreateCsvFileConsole", "Cre
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Models", "Models\Models.csproj", "{86A18DBF-909C-4B1E-BC77-BEA1B8A5E2F9}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ReflectionTest", "ReflectionTest\ReflectionTest.csproj", "{8EAECAB3-EC4E-4A1E-9AE7-C722D35EBB8F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ReflectionSpan", "ReflectionSpan\ReflectionSpan.csproj", "{8EAECAB3-EC4E-4A1E-9AE7-C722D35EBB8F}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SourceGeneratorSetProperty", "SourceGeneratorSetProperty\SourceGeneratorSetProperty.csproj", "{540C176A-E750-47D7-9FE6-513856394519}"
 EndProject
