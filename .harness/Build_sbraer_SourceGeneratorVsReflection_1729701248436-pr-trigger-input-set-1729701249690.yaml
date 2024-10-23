@@ -1,0 +1,14 @@
+inputSet:
+  name: Build_sbraer_SourceGeneratorVsReflection_1729701248436-pr-trigger-input-set
+  identifier: Build_sbraer_SourceGeneratorVsReflection_1729701248436prtriggerinputset
+  orgIdentifier: default
+  projectIdentifier: Cipcip
+  pipeline:
+    identifier: Build_sbraer_SourceGeneratorVsReflection_1729701248436
+    properties:
+      ci:
+        codebase:
+          build:
+            type: PR
+            spec:
+              number: <+trigger.prNumber>
