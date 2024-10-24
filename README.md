@@ -1,2 +1,2 @@
-# Test
-Test...
+# Source generator vs Reflection
+Simple benchmark
