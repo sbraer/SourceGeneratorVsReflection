@@ -1,0 +1,14 @@
+inputSet:
+  name: Build_sbraer_SourceGeneratorVsReflection_1729799707004-push-trigger-input-set
+  identifier: Build_sbraer_SourceGeneratorVsReflection_1729799707004pushtriggerinputset
+  orgIdentifier: default
+  projectIdentifier: CipCIp
+  pipeline:
+    identifier: Build_sbraer_SourceGeneratorVsReflection_1729799707004
+    properties:
+      ci:
+        codebase:
+          build:
+            type: branch
+            spec:
+              branch: <+trigger.branch>
